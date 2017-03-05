@@ -7,13 +7,13 @@ PE = "1"
 KV = "3.13.5"
 
 INC_PR = "r7"
-SRCREV = ""
+SRCREV = "${AUTOREV}"
 
 MODULE = "linux-3.13.5"
 
 KERNEL_CONFIG = "${@base_contains("VUPLUS_FEATURES", "dvbproxy", "${MACHINE}_defconfig_proxy", "${MACHINE}_defconfig", d)}"
 
-SRC_URI += "http://archive.vuplus.com/download/kernel/stblinux-${KV}.tar.bz2 \
+SRC_URI += "git://github.com/novag/vuplus-linux.git;branch=3.13.5-r7.5 \
         file://rt2800usb_fix_warn_tx_status_timeout_to_dbg.patch \
         file://linux-tcp_output.patch \
         file://${KERNEL_CONFIG} \
@@ -23,7 +23,7 @@ SRC_URI += "${@base_contains("VUPLUS_FEATURES", "dvbproxy", "file://linux_dvb_ad
 
 inherit kernel
 
-S = "${WORKDIR}/linux"
+S = "${WORKDIR}/git"
 
 RREPLACES_${PN} = "linux-vuplus"
 RCONFLICTS_${PN} = "linux-vuplus"
@@ -56,8 +56,3 @@ pkg_postinst_kernel-image () {
 }
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-vuplus-${KV}:"
-
-SRC_URI[md5sum] = "19e9956653437b99b4fa6ec3e16a3e99"
-SRC_URI[sha256sum] = "ef7fb307582ff243aacff8a13025fe028634aaf650ada309991ae03622962f61"
-
-
